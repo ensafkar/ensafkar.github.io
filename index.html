@@ -139,6 +139,7 @@ h2 {
 
     <script type="module">
         import { getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+        import { getDatabase, ref as dbRef, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
@@ -171,15 +172,27 @@ h2 {
 
             // Upload the file
              uploadBytes(storageRef, file).then((snapshot) => {
+                getDownloadURL(snapshot.ref).then((downloadURL) => {
+            saveImageURLToDatabase(downloadURL, file.name);
         console.log('Dosya yüklendi: ', snapshot.metadata.name);
 
         // Yüklenen dosyanın URL'sini al
-        getDownloadURL(snapshot.ref).then((downloadURL) => {
             console.log('Dosya indirme URL:', downloadURL);
             displayImage(downloadURL);
         });
     }).catch((error) => {
         // Hata işleme
+    });
+}
+// Yüklenen dosyanın URL'sini Firebase Database'e kaydetme
+function saveImageURLToDatabase(downloadURL, fileName) {
+    addDoc(collection(db, "dugunFotograflari"), {
+        url: downloadURL,
+        name: fileName
+    }).then(() => {
+        console.log("URL veritabanına kaydedildi");
+    }).catch((error) => {
+        console.error("Veritabanına kaydetme hatası: ", error);
     });
 }
 
@@ -193,6 +206,17 @@ function displayImage(downloadURL) {
     imgElement.style.margin = '10px';
     imageList.appendChild(imgElement);
 }
+function fetchImages() {
+    getDocs(collection(db, "dugunFotograflari")).then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+            displayImage(doc.data().url);
+        });
+    });
+}
+
+// Sayfa yüklendiğinde fotoğrafları çek
+window.onload = fetchImages;
+
     </script>
 </body>
 
