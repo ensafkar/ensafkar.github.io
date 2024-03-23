@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Düğün Fotoğrafları Yükleme Sayfası</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+      body {
+    font-family: 'Helvetica', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+h2 {
+    color: #444;
+    margin: 20px 0;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.upload-area {
+    width: 100%;
+    max-width: 500px;
+    border: 2px dashed #ccc;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: rgb(139, 123, 123);
+    margin: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* İçerikleri ortalar */
+    justify-content: center;
+}
+.upload-area input[type="file"] {
+            padding: 12px 24px; /* Görünümünü buton gibi yapar */
+            margin: 10px 0; /* Butondan boşluk bırakır */
+        }
+
+/* Yükle butonu için stil */
+.button {
+    background-color: #5c6bc0;
+    color: white;
+    margin: 10px 0; /* Buton üstünden ve altından boşluk bırakır */
+    border: none;
+    border-radius: 5px;
+    padding: 12px 24px; /* Butonun boyutunu buradan ayarlayabilirsiniz */
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    width: 200px; /* Buton genişliğini sabit bir değere ayarlayabilirsiniz */
+    display: inline-block; /* Butonu yan yatmaktan çıkarmak için */
+}
+
+
+/* Küçük ekranlarda buton boyutunu ayarlamak için */
+@media (max-width: 768px) {
+    .button {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+}
+
+
+.button:hover {
+    background-color: #3f51b5;
+}
+
+.footer {
+    background-color: #e0e0e0;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    left: 0;
+    bottom: 200px;
+    width: 100%;
+    
+}
+
+/* Responsive düzenlemeler */
+@media (max-width: 768px) {
+    .content {
+        padding: 10px;
+    }
+    .footer {
+                bottom: 100px; /* Küçük ekranlarda footer yüksekliği */
+    }
+    h2 {
+        font-size: 24px;
+    }
+
+    .upload-area {
+        padding: 15px;
+    }
+
+    .button {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    h2 {
+        font-size: 20px;
+    }
+}
+
+    </style>
+</head>
+
+<body>
+    <h2>Düğün Fotoğraflarınızı Yükleyin</h2>
+    <p>Buraya fotoğraf yükleyerek düğün anılarınızı paylaşabilirsiniz.</p>
+
+    <!-- Yükleme butonu -->
+    <div class="upload-area">
+    <input type="file" id="fileInput" />
+    <button class="button" onclick="uploadFile()">Yükle</button>
+    </div>
+    <div id="imageList" style="display: flex; flex-wrap: wrap; justify-content: center;">
+        </div>
+
+    <div class="footer">
+        <p>Made by Darga Company</p>
+    </div>
+
+    <script type="module">
+        import { getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB1IvdJrZBZt87Z2vMvpoOstLMxHp8KzsE",
+            authDomain: "y-twedding.firebaseapp.com",
+            projectId: "y-twedding",
+            storageBucket: "y-twedding.appspot.com",
+            messagingSenderId: "385032009162",
+            appId: "1:385032009162:web:a1455009e814e1ef9dcb33",
+            measurementId: "G-5VHSY3HD4C"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const storage = getStorage(app);
+
+        window.uploadFile = function () {
+            var input = document.getElementById('fileInput');
+            var file = input.files[0];
+            if (!file) {
+                alert('Lütfen bir dosya seçin.');
+                return;
+            }
+
+            // Create a storage reference
+            const storageRef = ref(storage, 'dugun_fotograflari/' + file.name);
+
+            // Upload the file
+             uploadBytes(storageRef, file).then((snapshot) => {
+        console.log('Dosya yüklendi: ', snapshot.metadata.name);
+
+        // Yüklenen dosyanın URL'sini al
+        getDownloadURL(snapshot.ref).then((downloadURL) => {
+            console.log('Dosya indirme URL:', downloadURL);
+            displayImage(downloadURL);
+        });
+    }).catch((error) => {
+        // Hata işleme
+    });
+}
+
+// Yüklenen dosyanın URL'sini bir liste olarak ekleme
+function displayImage(downloadURL) {
+    const imageList = document.getElementById('imageList');
+    const imgElement = document.createElement('img');
+    imgElement.src = downloadURL;
+    imgElement.style.width = '100px'; // Görüntü boyutunu ayarlayabilirsiniz
+    imgElement.style.height = '100px'; // Görüntü boyutunu ayarlayabilirsiniz
+    imgElement.style.margin = '10px';
+    imageList.appendChild(imgElement);
+}
+    </script>
+</body>
+
+</html>
