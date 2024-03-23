@@ -138,11 +138,9 @@ h2 {
     </div>
 
     <script type="module">
-        import { getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
-        import { getDatabase, ref as dbRef, onValue } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
-        import { getStorage, ref, uploadBytes } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
+        import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -171,52 +169,47 @@ h2 {
             const storageRef = ref(storage, 'dugun_fotograflari/' + file.name);
 
             // Upload the file
-             uploadBytes(storageRef, file).then((snapshot) => {
-                getDownloadURL(snapshot.ref).then((downloadURL) => {
-            saveImageURLToDatabase(downloadURL, file.name);
-        console.log('Dosya yüklendi: ', snapshot.metadata.name);
+        uploadBytes(storageRef, file).then((snapshot) => {
+            console.log('Dosya yüklendi: ', snapshot.metadata.name);
 
-        // Yüklenen dosyanın URL'sini al
-            console.log('Dosya indirme URL:', downloadURL);
-            displayImage(downloadURL);
+            // Yüklenen dosyanın URL'sini al ve görüntüle
+            getDownloadURL(snapshot.ref).then((downloadURL) => {
+                console.log('Dosya indirme URL:', downloadURL);
+                displayImage(downloadURL);
+            });
+        }).catch((error) => {
+            console.error('Dosya yükleme hatası: ', error);
+            alert('Dosya yüklenirken bir hata oluştu: ' + error.message);
         });
-    }).catch((error) => {
-        // Hata işleme
-    });
-}
-// Yüklenen dosyanın URL'sini Firebase Database'e kaydetme
-function saveImageURLToDatabase(downloadURL, fileName) {
-    addDoc(collection(db, "dugunFotograflari"), {
-        url: downloadURL,
-        name: fileName
-    }).then(() => {
-        console.log("URL veritabanına kaydedildi");
-    }).catch((error) => {
-        console.error("Veritabanına kaydetme hatası: ", error);
-    });
-}
+    }
 
 // Yüklenen dosyanın URL'sini bir liste olarak ekleme
 function displayImage(downloadURL) {
-    const imageList = document.getElementById('imageList');
-    const imgElement = document.createElement('img');
-    imgElement.src = downloadURL;
-    imgElement.style.width = '100px'; // Görüntü boyutunu ayarlayabilirsiniz
-    imgElement.style.height = '100px'; // Görüntü boyutunu ayarlayabilirsiniz
-    imgElement.style.margin = '10px';
-    imageList.appendChild(imgElement);
-}
-function fetchImages() {
-    getDocs(collection(db, "dugunFotograflari")).then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-            displayImage(doc.data().url);
-        });
-    });
-}
+        const imageList = document.getElementById('imageList');
+        const imgElement = document.createElement('img');
+        imgElement.src = downloadURL;
+        imgElement.style.width = '100px';
+        imgElement.style.height = '100px';
+        imgElement.style.margin = '10px';
+        imageList.appendChild(imgElement);
+    }
+// Sayfa yüklendiğinde, tüm resimleri listele
+function listImages() {
+        const listRef = ref(storage, 'dugun_fotograflari/');
+        listAll(listRef)
+            .then((res) => {
+                res.items.forEach((itemRef) => {
+                    getDownloadURL(itemRef).then((downloadURL) => {
+                        displayImage(downloadURL);
+                    });
+                });
+            }).catch((error) => {
+                console.error("Error listing images: ", error);
+            });
+    }
 
-// Sayfa yüklendiğinde fotoğrafları çek
-window.onload = fetchImages;
-
+    // Sayfa yüklendiğinde, resimleri listele
+    window.onload = listImages;
     </script>
 </body>
 
