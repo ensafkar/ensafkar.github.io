@@ -2,147 +2,137 @@
 <html>
 
 <head>
-
     <title>Düğün Fotoğrafları Yükleme Sayfası</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <style>
-      body {
-    font-family: 'Helvetica', sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    text-align: center;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-h2 {
-    color: #444;
-    margin: 20px 0;
-}
-
-.content {
-    flex: 1;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.upload-area {
-    width: 100%;
-    max-width: 500px;
-    border: 2px dashed #ccc;
-    padding: 20px;
-    border-radius: 10px;
-    background-color: rgb(139, 123, 123);
-    margin: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* İçerikleri ortalar */
-    justify-content: center;
-}
-.upload-area input[type="file"] {
-            padding: 12px 24px; /* Görünümünü buton gibi yapar */
-            margin: 10px 0; /* Butondan boşluk bırakır */
+        body {
+            font-family: 'Helvetica', sans-serif;
+            background-image: url('file://C:/Users/Ensaf/Wedding/ensafkar.github.io/logo.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
-/* Yükle butonu için stil */
-.button {
-    background-color: #5c6bc0;
-    color: white;
-    margin: 10px 0; /* Buton üstünden ve altından boşluk bırakır */
-    border: none;
-    border-radius: 5px;
-    padding: 12px 24px; /* Butonun boyutunu buradan ayarlayabilirsiniz */
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    width: 200px; /* Buton genişliğini sabit bir değere ayarlayabilirsiniz */
-    display: inline-block; /* Butonu yan yatmaktan çıkarmak için */
-}
+        h2 {
+            color: #444;
+            margin: 20px 0;
+        }
 
+        .content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
 
-/* Küçük ekranlarda buton boyutunu ayarlamak için */
-@media (max-width: 768px) {
-    .button {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-}
+        .upload-area {
+            width: 100%;
+            max-width: 500px;
+            border: 2px dashed #ccc;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: rgb(139, 123, 123);
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
 
+        .upload-area input[type="file"] {
+            padding: 12px 24px;
+            margin: 10px 0;
+        }
 
-.button:hover {
-    background-color: #3f51b5;
-}
+        .button {
+            background-color: #5c6bc0;
+            color: white;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            width: 200px;
+            display: inline-block;
+        }
 
-.footer {
-    background-color: #e0e0e0;
-    text-align: center;
-    padding: 10px;
-    position: absolute;
-    left: 0;
-    bottom: 200px;
-    width: 100%;
-    
-}
+        @media (max-width: 768px) {
+            .button {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
 
-/* Responsive düzenlemeler */
-@media (max-width: 768px) {
-    .content {
-        padding: 10px;
-    }
-    .footer {
-                bottom: 100px; /* Küçük ekranlarda footer yüksekliği */
-    }
-    h2 {
-        font-size: 24px;
-    }
+        .button:hover {
+            background-color: #3f51b5;
+        }
 
-    .upload-area {
-        padding: 15px;
-    }
+        .footer {
+            background-color: #e0e0e0;
+            text-align: center;
+            padding: 10px;
+            position: absolute;
+            left: 0;
+            bottom: 200px;
+            width: 100%;
+        }
 
-    .button {
-        padding: 10px 20px;
-    }
-}
+        @media (max-width: 768px) {
+            .content {
+                padding: 10px;
+            }
 
-@media (max-width: 480px) {
-    h2 {
-        font-size: 20px;
-    }
-}
+            .footer {
+                bottom: 100px;
+            }
 
+            h2 {
+                font-size: 24px;
+            }
+
+            .upload-area {
+                padding: 15px;
+            }
+
+            .button {
+                padding: 10px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <h2>Düğün Fotoğraflarınızı Yükleyin</h2>
     <p>Buraya fotoğraf yükleyerek düğün anılarınızı paylaşabilirsiniz.</p>
-
-    <!-- Yükleme butonu -->
     <div class="upload-area">
-    <input type="file" id="fileInput" />
-    <button class="button" onclick="uploadFile()">Yükle</button>
+        <input type="file" id="fileInput" multiple accept="image/*" />
+        <button class="button" onclick="uploadFiles()">Yükle</button>
     </div>
     <div id="imageList" style="display: flex; flex-wrap: wrap; justify-content: center;">
-        </div>
-
+    </div>
     <div class="footer">
         <p>Made by Darga Company</p>
     </div>
-
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyB1IvdJrZBZt87Z2vMvpoOstLMxHp8KzsE",
             authDomain: "y-twedding.firebaseapp.com",
@@ -153,51 +143,49 @@ h2 {
             measurementId: "G-5VHSY3HD4C"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const storage = getStorage(app);
 
-        window.uploadFile = function () {
-            var input = document.getElementById('fileInput');
-            var file = input.files[0];
-            if (!file) {
-                alert('Lütfen bir dosya seçin.');
+        window.uploadFiles = async function () {
+            const input = document.getElementById('fileInput');
+            const files = input.files;
+            if (files.length === 0) {
+                alert('Lütfen en az bir dosya seçin.');
                 return;
             }
 
-            // Create a storage reference
-            const storageRef = ref(storage, 'dugun_fotograflari/' + file.name);
+            const promises = [];
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const storageRef = ref(storage, 'dugun_fotograflari/' + file.name);
+                const uploadTask = uploadBytes(storageRef, file).then((snapshot) => {
+                    return getDownloadURL(snapshot.ref).then((downloadURL) => {
+                        displayImage(downloadURL);
+                    });
+                }).catch((error) => {
+                    console.error('Dosya yükleme hatası: ', error);
+                    alert('Dosya yüklenirken bir hata oluştu: ' + error.message);
+                });
+                promises.push(uploadTask);
+            }
 
-            // Upload the file
-        uploadBytes(storageRef, file).then((snapshot) => {
-            console.log('Dosya yüklendi: ', snapshot.metadata.name);
+            await Promise.all(promises);
+            alert('Tüm dosyalar yüklendi!');
+        }
 
-            // Yüklenen dosyanın URL'sini al ve görüntüle
-            getDownloadURL(snapshot.ref).then((downloadURL) => {
-                console.log('Dosya indirme URL:', downloadURL);
-                displayImage(downloadURL);
-            });
-        }).catch((error) => {
-            console.error('Dosya yükleme hatası: ', error);
-            alert('Dosya yüklenirken bir hata oluştu: ' + error.message);
-        });
-    }
+        function displayImage(downloadURL) {
+            const imageList = document.getElementById('imageList');
+            const imgElement = document.createElement('img');
+            imgElement.src = downloadURL;
+            imgElement.style.width = '100px';
+            imgElement.style.height = '100px';
+            imgElement.style.margin = '10px';
+            imageList.appendChild(imgElement);
+        }
 
-// Yüklenen dosyanın URL'sini bir liste olarak ekleme
-function displayImage(downloadURL) {
-        const imageList = document.getElementById('imageList');
-        const imgElement = document.createElement('img');
-        imgElement.src = downloadURL;
-        imgElement.style.width = '100px';
-        imgElement.style.height = '100px';
-        imgElement.style.margin = '10px';
-        imageList.appendChild(imgElement);
-    }
-// Sayfa yüklendiğinde, tüm resimleri listele
-function listImages() {
-        const listRef = ref(storage, 'dugun_fotograflari/');
-        listAll(listRef)
-            .then((res) => {
+        function listImages() {
+            const listRef = ref(storage, 'dugun_fotograflari/');
+            listAll(listRef).then((res) => {
                 res.items.forEach((itemRef) => {
                     getDownloadURL(itemRef).then((downloadURL) => {
                         displayImage(downloadURL);
@@ -206,10 +194,9 @@ function listImages() {
             }).catch((error) => {
                 console.error("Error listing images: ", error);
             });
-    }
+        }
 
-    // Sayfa yüklendiğinde, resimleri listele
-    window.onload = listImages;
+        window.onload = listImages;
     </script>
 </body>
 
