@@ -10,6 +10,7 @@
             background-image: url('file://C:/Users/Ensaf/Wedding/ensafkar.github.io/logo.png');
             background-repeat: no-repeat;
             background-size: cover;
+            background-attachment: fixed;
             color: #333;
             text-align: center;
             margin: 0;
@@ -17,6 +18,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            justify-content: space-between;
         }
 
         h2 {
@@ -39,7 +41,7 @@
             border: 2px dashed #ccc;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgb(139, 123, 123);
+            background-color: rgba(139, 123, 123, 0.9);
             margin: 10px;
             display: flex;
             flex-direction: column;
@@ -50,6 +52,7 @@
         .upload-area input[type="file"] {
             padding: 12px 24px;
             margin: 10px 0;
+            width: 100%;
         }
 
         .button {
@@ -62,15 +65,8 @@
             cursor: pointer;
             font-size: 16px;
             margin-top: 10px;
-            width: 200px;
-            display: inline-block;
-        }
-
-        @media (max-width: 768px) {
-            .button {
-                padding: 8px 12px;
-                font-size: 14px;
-            }
+            width: 100%;
+            max-width: 200px;
         }
 
         .button:hover {
@@ -81,19 +77,12 @@
             background-color: #e0e0e0;
             text-align: center;
             padding: 10px;
-            position: absolute;
-            left: 0;
-            bottom: 200px;
             width: 100%;
         }
 
         @media (max-width: 768px) {
             .content {
                 padding: 10px;
-            }
-
-            .footer {
-                bottom: 100px;
             }
 
             h2 {
@@ -118,13 +107,14 @@
 </head>
 
 <body>
-    <h2>Düğün Fotoğraflarınızı Yükleyin</h2>
-    <p>Buraya fotoğraf yükleyerek düğün anılarınızı paylaşabilirsiniz.</p>
-    <div class="upload-area">
-        <input type="file" id="fileInput" multiple accept="image/*" />
-        <button class="button" onclick="uploadFiles()">Yükle</button>
-    </div>
-    <div id="imageList" style="display: flex; flex-wrap: wrap; justify-content: center;">
+    <div class="content">
+        <h2>Düğün Fotoğraflarınızı Yükleyin</h2>
+        <p>Buraya fotoğraf yükleyerek düğün anılarınızı paylaşabilirsiniz.</p>
+        <div class="upload-area">
+            <input type="file" id="fileInput" multiple accept="image/*" />
+            <button class="button" onclick="uploadFiles()">Yükle</button>
+        </div>
+        <div id="imageList" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
     </div>
     <div class="footer">
         <p>Made by Darga Company</p>
