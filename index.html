@@ -7,10 +7,7 @@
     <style>
         body {
             font-family: 'Helvetica', sans-serif;
-            background-image: url('file://C:/Users/Ensaf/Wedding/ensafkar.github.io/logo.png');
-            background-repeat: no-repeat;
-            background-size: cover;
-            background-attachment: fixed;
+            background-color: #f4f4f9;
             color: #333;
             text-align: center;
             margin: 0;
@@ -21,9 +18,16 @@
             justify-content: space-between;
         }
 
-        h2 {
+        .header {
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h2 {
+            margin: 0;
+            font-size: 24px;
             color: #444;
-            margin: 20px 0;
         }
 
         .content {
@@ -41,8 +45,8 @@
             border: 2px dashed #ccc;
             padding: 20px;
             border-radius: 10px;
-            background-color: rgba(139, 123, 123, 0.9);
-            margin: 10px;
+            background-color: #fff;
+            margin: 20px 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -50,9 +54,11 @@
         }
 
         .upload-area input[type="file"] {
-            padding: 12px 24px;
+            padding: 12px;
             margin: 10px 0;
             width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
 
         .button {
@@ -64,9 +70,9 @@
             padding: 12px 24px;
             cursor: pointer;
             font-size: 16px;
-            margin-top: 10px;
             width: 100%;
             max-width: 200px;
+            transition: background-color 0.3s;
         }
 
         .button:hover {
@@ -80,13 +86,100 @@
             width: 100%;
         }
 
+        .image-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        .image-list img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 5px;
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+        .image-list img:hover {
+            transform: scale(1.1);
+        }
+
+        .more-images {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .more-images:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #f4f4f9;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            max-height: 90%;
+            overflow: auto;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content img {
+            width: 100%;
+            height: auto;
+            margin: 10px 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 25px;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
         @media (max-width: 768px) {
             .content {
                 padding: 10px;
             }
 
-            h2 {
-                font-size: 24px;
+            .header h2 {
+                font-size: 20px;
             }
 
             .upload-area {
@@ -96,29 +189,65 @@
             .button {
                 padding: 10px 20px;
             }
+
+            .image-list img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .more-images {
+                width: 80px;
+                height: 80px;
+            }
         }
 
         @media (max-width: 480px) {
-            h2 {
-                font-size: 20px;
+            .header h2 {
+                font-size: 18px;
+            }
+
+            .upload-area input[type="file"] {
+                padding: 10px;
+            }
+
+            .button {
+                padding: 8px 16px;
+            }
+
+            .image-list img {
+                width: 70px;
+                height: 70px;
+            }
+
+            .more-images {
+                width: 70px;
+                height: 70px;
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="content">
+    <div class="header">
         <h2>Düğün Fotoğraflarınızı Yükleyin</h2>
+    </div>
+    <div class="content">
         <p>Buraya fotoğraf yükleyerek düğün anılarınızı paylaşabilirsiniz.</p>
         <div class="upload-area">
             <input type="file" id="fileInput" multiple accept="image/*" />
             <button class="button" onclick="uploadFiles()">Yükle</button>
         </div>
-        <div id="imageList" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+        <div id="imageList" class="image-list"></div>
     </div>
     <div class="footer">
         <p>Made by Darga Company</p>
     </div>
+
+    <div id="imageModal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div class="modal-content" id="modalContent"></div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
         import { getStorage, ref, uploadBytes, listAll, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-storage.js";
@@ -167,10 +296,50 @@
             const imageList = document.getElementById('imageList');
             const imgElement = document.createElement('img');
             imgElement.src = downloadURL;
-            imgElement.style.width = '100px';
-            imgElement.style.height = '100px';
-            imgElement.style.margin = '10px';
+            imgElement.onclick = () => openModal(downloadURL);
             imageList.appendChild(imgElement);
+
+            const totalImages = imageList.querySelectorAll('img').length;
+            if (totalImages > 5) {
+                const moreImages = document.createElement('div');
+                moreImages.className = 'more-images';
+                moreImages.innerText = '+' + (totalImages - 5);
+                moreImages.onclick = showMoreImages;
+                imageList.appendChild(moreImages);
+            }
+        }
+
+        function openModal(imageSrc) {
+            const imageModal = document.getElementById('imageModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `<img src="${imageSrc}" />`;
+            imageModal.style.display = 'flex';
+        }
+
+        function showMoreImages() {
+            const imageModal = document.getElementById('imageModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = '';
+            const images = document.querySelectorAll('#imageList img');
+            images.forEach((img) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = img.src;
+                modalContent.appendChild(imgElement);
+            });
+            imageModal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const imageModal = document.getElementById('imageModal');
+            imageModal.style.display = 'none';
+        }
+
+        // Modal dışına tıklanınca kapatma işlevi
+        window.onclick = function (event) {
+            const imageModal = document.getElementById('imageModal');
+            if (event.target === imageModal) {
+                imageModal.style.display = 'none';
+            }
         }
 
         function listImages() {
